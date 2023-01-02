@@ -3,11 +3,13 @@ import sys
 
 import torch
 import click
+import torch.optim as optim
 
 from data import mnist
 from model import MyAwesomeModel
 
-
+import matplotlib.pyplot as plt
+import numpy as np
 @click.group()
 def cli():
     pass
@@ -21,9 +23,33 @@ def train(lr):
 
     # TODO: Implement training loop here
     model = MyAwesomeModel()
+    criterion = torch.nn.CrossEntropyLoss()
+    #criterion = torch.nn.NLLLoss()
+    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9)
     train_set, _ = mnist()
-
-
+    batch_size = 64
+    trainloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size,
+                                          shuffle=True, num_workers=4)
+    trainingloss = []
+    xaxislol = np.arange(1,21)
+    for epoch in range(20):
+        running_loss = 0.0
+        for i, data in enumerate(trainloader):
+            inputs,labels = data
+            optimizer.zero_grad()
+            outputs = model(inputs.float())
+            loss = criterion(outputs,labels)
+            loss.backward()
+            optimizer.step()
+            running_loss += loss.item()
+        trainingloss.append(running_loss/25000)
+            
+    
+    torch.save(model, 'trained_model.pt')
+    plt.plot(xaxislol,trainingloss)
+    plt.ylabel('training loss')
+    plt.xlabel('training epoch')
+    plt.savefig('meiradog.png')
 @click.command()
 @click.argument("model_checkpoint")
 def evaluate(model_checkpoint):
@@ -33,6 +59,21 @@ def evaluate(model_checkpoint):
     # TODO: Implement evaluation logic here
     model = torch.load(model_checkpoint)
     _, test_set = mnist()
+    testloader = torch.utils.data.DataLoader(test_set, batch_size=1,
+                                         shuffle=False, num_workers=4)
+    correct = 0
+    total = 0
+    # since we're not training, we don't need to calculate the gradients for our outputs
+    with torch.no_grad():
+        for data in testloader:
+            images, labels = data
+            # calculate outputs by running images through the network
+            outputs = model(images.float())
+            # the class with the highest energy is what we choose as prediction
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    print('Accuracy of the network on the test set: ', 100 * correct // total, '%')
 
 
 cli.add_command(train)
