@@ -27,11 +27,12 @@ def train(lr):
     #criterion = torch.nn.NLLLoss()
     optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9)
     train_set, _ = mnist()
-    batch_size = 64
+    batch_size = 128
     trainloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size,
                                           shuffle=True, num_workers=4)
     trainingloss = []
     xaxislol = np.arange(1,21)
+    model.train()
     for epoch in range(20):
         running_loss = 0.0
         for i, data in enumerate(trainloader):
@@ -63,13 +64,11 @@ def evaluate(model_checkpoint):
                                          shuffle=False, num_workers=4)
     correct = 0
     total = 0
-    # since we're not training, we don't need to calculate the gradients for our outputs
+    model.eval()
     with torch.no_grad():
         for data in testloader:
             images, labels = data
-            # calculate outputs by running images through the network
             outputs = model(images.float())
-            # the class with the highest energy is what we choose as prediction
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
