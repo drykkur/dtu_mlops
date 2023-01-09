@@ -1,8 +1,9 @@
-from tests import _PATH_DATA
-from data import mnist
-from model import MyAwesomeModel
-import torch
 import pytest
+import torch
+from model import MyAwesomeModel
+from tests import _PATH_DATA
+
+from data import mnist
 
 # def test_error_on_wrong_shape(): cache
 #    with pytest.raises(ValueError, match='Expected input to a 4D tensor'):

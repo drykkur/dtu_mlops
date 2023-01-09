@@ -1,7 +1,8 @@
-from tests import _PATH_DATA
-from data import mnist
-import torch
 import pytest
+import torch
+from tests import _PATH_DATA
+
+from data import mnist
 
 dataset = mnist()
 train = dataset[0]

@@ -1,15 +1,16 @@
 import argparse
 import sys
 
-import torch
 import click
-import torch.optim as optim
-
-from data import mnist
-from model import MyAwesomeModel
-
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
+import torch.optim as optim
+from model import MyAwesomeModel
+
+from data import mnist
+
+
 @click.group()
 def cli():
     pass
