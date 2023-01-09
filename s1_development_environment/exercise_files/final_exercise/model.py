@@ -17,6 +17,8 @@ class MyAwesomeModel(nn.Module):
         self.fc2 = nn.Linear(50, 10)
 
     def forward(self, x):
+        # if x.ndim != 4:
+        #     raise ValueError('Expected input to a 4D tensor')
         # x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
         # x = F.max_pool2d(F.relu(self.conv2(x)), 2)
         # x = torch.flatten(x, 1)
