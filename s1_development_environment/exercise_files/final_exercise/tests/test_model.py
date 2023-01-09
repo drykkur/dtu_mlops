@@ -4,7 +4,7 @@ from model import MyAwesomeModel
 import torch
 import pytest
 
-# def test_error_on_wrong_shape():
+# def test_error_on_wrong_shape(): cache
 #    with pytest.raises(ValueError, match='Expected input to a 4D tensor'):
 #       model(torch.randn(1,2,3))
 
