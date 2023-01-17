@@ -1,7 +1,6 @@
-import pytest
 import torch
 from model import MyAwesomeModel
-from tests import _PATH_DATA
+# from tests import _PATH_DATA
 
 from data import mnist
 
@@ -15,14 +14,11 @@ testing = dataset[1]
 model = MyAwesomeModel()
 model.eval()
 testloader = torch.utils.data.DataLoader(testing, batch_size=1,
-                                         shuffle=False, num_workers=4)
+                                         shuffle=False, num_workers=1)
 model.eval()
 with torch.no_grad():
     for data in testloader:
         images, labels = data
         outputs = model(images.float())
         break
-assert outputs.shape == (1,10)
-
-
-
+assert outputs.shape == (1, 10)
